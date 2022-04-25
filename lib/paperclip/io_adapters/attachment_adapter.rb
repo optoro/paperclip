@@ -21,9 +21,19 @@ module Paperclip
     end
 
     def copy_to_tempfile(source)
+      Paperclip.log(source.queued_for_write)
+
       if source.staged?
-        FileUtils.cp(source.staged_path(@style), destination.path)
+        src = source.staged_path(@style)
+        dst = destination.path
+
+        Paperclip.log("tmp directory before copy, source file: #{src}")
+        puts `ls -lah /tmp`
+        FileUtils.cp(src, dst)
+        Paperclip.log("tmp directory after copy, destination file: #{dst}")
+        puts `ls -lah /tmp`
       else
+        Paperclip.log("attachment is not staged")
         source.copy_to_local_file(@style, destination.path)
       end
       destination
