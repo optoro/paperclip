@@ -26,10 +26,6 @@ module Paperclip
         )
       rescue Cocaine::ExitStatusError => e
         Paperclip.log(e.message)
-        ls_out = `ls -lah #{Pathname.new(path).dirname}`
-        Paperclip.log("file directory contents:\n#{ls_out}")
-        df_out = `df -h #{Pathname.new(path).dirname}`
-        Paperclip.log("disk usage:\n#{df_out}")
         ""
       rescue Cocaine::CommandNotFoundError => e
         raise_because_imagemagick_missing
