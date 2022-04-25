@@ -21,10 +21,13 @@ module Paperclip
           "-format '%wx%h,#{orientation}' :file", {
             :file => "#{path}[0]"
           }, {
-            :swallow_stderr => true
+            :swallow_stderr => false
           }
         )
-      rescue Cocaine::ExitStatusError
+      rescue Cocaine::ExitStatusError => e
+        Paperclip.log(e.message)
+        ls_out = `ls -lah #{Pathname.new(path).dirname}`
+        Paperclip.log("file directory contents:\n#{ls_out}.join}")
         ""
       rescue Cocaine::CommandNotFoundError => e
         raise_because_imagemagick_missing
